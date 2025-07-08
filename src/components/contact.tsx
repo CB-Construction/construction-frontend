@@ -1,8 +1,10 @@
-import { Menu, X, Building, Users, Phone, Mail, MapPin, ArrowRight, CheckCircle, Truck, HardHat, Wrench, Eye, Target, Zap, Shield, Sparkles, Clock, TrendingUp, Award, Star } from 'lucide-react';
+import { Phone, Mail, MapPin, ArrowRight, Sparkles } from "lucide-react";
 
-
-export default function Contact (){
-    return (<>   {/* Enhanced Contact Section */}
+export default function Contact() {
+  return (
+    <>
+      {" "}
+      {/* Enhanced Contact Section */}
       <section id="contact" className="py-24 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
@@ -12,22 +14,29 @@ export default function Contact (){
               </span>
             </h2>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Ready to transform your vision into reality? Connect with our team of innovation experts
+              Ready to transform your vision into reality? Connect with our team
+              of innovation experts
             </p>
           </div>
-          
+
           <div className="grid md:grid-cols-2 gap-12">
             <div className="space-y-8">
-              <h3 className="text-3xl font-bold text-white mb-8">Get In Touch</h3>
+              <h3 className="text-3xl font-bold text-white mb-8">
+                Get In Touch
+              </h3>
               <div className="space-y-6">
                 <div className="flex items-center group">
                   <div className="p-4 bg-cyan-500/20 rounded-full border border-cyan-400/30 mr-6 group-hover:bg-cyan-500/30 transition-colors">
                     <Phone className="w-6 h-6 text-cyan-400" />
                   </div>
                   <div>
-                    <div className="text-white font-semibold">Smart Connect</div>
+                    <div className="text-white font-semibold">
+                      Smart Connect
+                    </div>
                     <div className="text-gray-300">+94 11 234 5678</div>
-                    <div className="text-sm text-emerald-400">Available 24/7</div>
+                    <div className="text-sm text-emerald-400">
+                      Available 24/7
+                    </div>
                   </div>
                 </div>
                 <div className="flex items-center group">
@@ -36,8 +45,12 @@ export default function Contact (){
                   </div>
                   <div>
                     <div className="text-white font-semibold">Digital Hub</div>
-                    <div className="text-gray-300">future@cbconstruction.lk</div>
-                    <div className="text-sm text-emerald-400">Response within 2 hours</div>
+                    <div className="text-gray-300">
+                      future@cbconstruction.lk
+                    </div>
+                    <div className="text-sm text-emerald-400">
+                      Response within 2 hours
+                    </div>
                   </div>
                 </div>
                 <div className="flex items-center group">
@@ -45,14 +58,22 @@ export default function Contact (){
                     <MapPin className="w-6 h-6 text-emerald-400" />
                   </div>
                   <div>
-                    <div className="text-white font-semibold">Innovation Center</div>
-                    <div className="text-gray-300">123 Future Avenue<br />Colombo 03, Sri Lanka</div>
-                    <div className="text-sm text-emerald-400">Open Mon-Sat 9AM-6PM</div>
+                    <div className="text-white font-semibold">
+                      Innovation Center
+                    </div>
+                    <div className="text-gray-300">
+                      123 Future Avenue
+                      <br />
+                      Colombo 03, Sri Lanka
+                    </div>
+                    <div className="text-sm text-emerald-400">
+                      Open Mon-Sat 9AM-6PM
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-            
+
             <div className="glass-card rounded-3xl p-8 hover:bg-white/10 transition-all duration-300">
               <h3 className="text-2xl font-bold text-white mb-6 flex items-center">
                 <Sparkles className="w-6 h-6 text-cyan-400 mr-2 animate-pulse" />
@@ -83,7 +104,9 @@ export default function Contact (){
                     <option value="">Project Type</option>
                     <option value="commercial">Smart Commercial</option>
                     <option value="residential">Future Living</option>
-                    <option value="infrastructure">Digital Infrastructure</option>
+                    <option value="infrastructure">
+                      Digital Infrastructure
+                    </option>
                     <option value="renovation">Adaptive Renovation</option>
                   </select>
                 </div>
@@ -103,7 +126,7 @@ export default function Contact (){
             </div>
           </div>
         </div>
-      </section></>)
+      </section>
+    </>
+  );
 }
-   
-   
