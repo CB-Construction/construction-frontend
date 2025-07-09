@@ -793,7 +793,7 @@ const Dashboard = () => {
                       </span>
                     </div>
                     <div
-                      className={`w-full ${isDarkMode ? "bg-gray-700" : "bg-gradient-to-r from-orange-100 to-amber-100"} rounded-full h-2`}
+                      className={`w-full ${isDarkMode ? "bg-gray-700" : "bg-gray-200"} rounded-full h-2`}
                     >
                       <div
                         className="bg-gradient-to-r from-cyan-400 to-emerald-400 h-2 rounded-full progress-bar"
@@ -919,7 +919,7 @@ const Dashboard = () => {
           </div>
         </div>
       </section>
-      <Contact />
+      <Contact isDarkMode={isDarkMode} />
 
       {/* Floating Action Buttons */}
       <div className="fixed bottom-6 right-6 z-40 flex flex-row space-x-4">
