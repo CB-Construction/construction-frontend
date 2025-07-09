@@ -207,148 +207,186 @@ const ChatBot = ({
           className={`fixed bottom-5 left-5 z-50 flex items-center justify-center w-16 h-16 rounded-full transition-transform duration-300 transform hover:scale-110 group futuristic-button`}
           aria-label="Open AI Assistant"
         >
-          <Bot className={`w-8 h-8 transition-colors duration-300 ${isDarkMode ? 'text-slate-300 group-hover:text-white' : 'text-slate-600 group-hover:text-slate-800'}`} />
+          <Bot
+            className={`w-8 h-8 transition-colors duration-300 ${isDarkMode ? "text-slate-300 group-hover:text-white" : "text-slate-600 group-hover:text-slate-800"}`}
+          />
           <div className="absolute top-0 right-0 w-4 h-4 bg-blue-500 rounded-full border-2 border-white dark:border-slate-800 animate-pulse"></div>
         </button>
       )}
 
       {/* Chat Window */}
       {isOpen && (
-        <div className={`chat-window futuristic-window fixed inset-0 sm:inset-auto sm:bottom-5 sm:left-5 z-50 w-full h-full sm:w-[400px] sm:max-h-[calc(100vh-40px)] flex flex-col ${getGlassStyle()} sm:rounded-2xl overflow-hidden ${
-          isMinimized ? 'sm:h-16' : 'sm:h-[600px]'
-        } ${isOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}`}>            
-            {/* Header */}
-            <div className={`flex items-center justify-between px-4 py-3 border-b ${
-              isDarkMode ? 'border-slate-700/50' : 'border-slate-200/70'
-            } flex-shrink-0`}>
-              <div className="flex items-center space-x-3">
-                <div className={`relative w-10 h-10 flex items-center justify-center rounded-full ${isDarkMode ? 'bg-slate-700' : 'bg-slate-200'}`}>
-                  <Bot className={`w-6 h-6 ${isDarkMode ? 'text-blue-400' : 'text-blue-500'}`} />
-                  <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 dark:border-slate-900 border-white"></div>
+        <div
+          className={`chat-window futuristic-window fixed inset-0 sm:inset-auto sm:bottom-5 sm:left-5 z-50 w-full h-full sm:w-[400px] sm:max-h-[calc(100vh-40px)] flex flex-col ${getGlassStyle()} sm:rounded-2xl overflow-hidden ${
+            isMinimized ? "sm:h-16" : "sm:h-[600px]"
+          } ${isOpen ? "scale-100 opacity-100" : "scale-95 opacity-0"}`}
+        >
+          {/* Header */}
+          <div className="flex items-center justify-between px-4 py-3 futuristic-window animate-gradient neon-glow flex-shrink-0">
+            <div className="flex items-center space-x-3">
+              <div
+                className={`relative w-10 h-10 flex items-center justify-center rounded-full ${isDarkMode ? "bg-slate-700" : "bg-slate-200"}`}
+              >
+                <Bot
+                  className={`w-6 h-6 ${isDarkMode ? "text-blue-400" : "text-blue-500"}`}
+                />
+                <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 dark:border-slate-900 border-white"></div>
+              </div>
+              <div>
+                <h3
+                  className={`text-md font-semibold ${isDarkMode ? "text-slate-100" : "text-slate-800"}`}
+                >
+                  {botName}
+                </h3>
+                <p
+                  className={`text-xs ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}
+                >
+                  AI Assistant
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-1">
+              <button
+                onClick={() => setIsMinimized(!isMinimized)}
+                className="p-2 neon-glow text-white hover:text-cyan-200 transition-colors duration-200 rounded-lg"
+                aria-label={isMinimized ? "Maximize chat" : "Minimize chat"}
+              >
+                {isMinimized ? (
+                  <ChevronUp className="w-5 h-5" />
+                ) : (
+                  <ChevronDown className="w-5 h-5" />
+                )}
+              </button>
+              <button
+                onClick={() => setIsOpen(false)}
+                className={`p-2 rounded-lg transition-colors duration-200 ${
+                  isDarkMode
+                    ? "text-slate-400 hover:bg-red-500/20 hover:text-red-400"
+                    : "text-slate-500 hover:bg-red-100 hover:text-red-500"
+                }`}
+                aria-label="Close chat"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+
+          {/* Messages */}
+          {!isMinimized && (
+            <>
+              <div
+                className={`flex-1 p-4 space-y-4 overflow-y-auto ${
+                  isDarkMode ? "bg-slate-800/30" : "bg-slate-100/30"
+                } [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-slate-400/50 dark:[&::-webkit-scrollbar-thumb]:bg-slate-600/50 [&::-webkit-scrollbar-thumb]:rounded-full`}
+              >
+                {messages.map((message) => (
+                  <div
+                    key={message.id}
+                    className={`flex message-bubble ${message.sender === "user" ? "justify-end" : "justify-start"}`}
+                  >
+                    <div className={`flex items-start space-x-3 max-w-[80%]`}>
+                      {message.sender === "bot" && (
+                        <div
+                          className={`w-8 h-8 flex-shrink-0 rounded-full flex items-center justify-center ${isDarkMode ? "bg-slate-700" : "bg-slate-200"}`}
+                        >
+                          <Bot
+                            className={`w-5 h-5 ${isDarkMode ? "text-blue-400" : "text-blue-500"}`}
+                          />
+                        </div>
+                      )}
+                      <div className="flex-1">
+                        <div
+                          className={`px-4 py-2.5 rounded-xl ${getMessageBubbleStyle(message.sender)}`}
+                        >
+                          {message.isTyping ? (
+                            <div className="flex items-center space-x-1.5">
+                              <div className="w-2 h-2 bg-current rounded-full animate-pulse"></div>
+                              <div
+                                className="w-2 h-2 bg-current rounded-full animate-pulse"
+                                style={{ animationDelay: "0.2s" }}
+                              ></div>
+                              <div
+                                className="w-2 h-2 bg-current rounded-full animate-pulse"
+                                style={{ animationDelay: "0.4s" }}
+                              ></div>
+                            </div>
+                          ) : (
+                            <p className="text-sm leading-normal whitespace-pre-wrap">
+                              {message.content}
+                            </p>
+                          )}
+                        </div>
+                        <p
+                          className={`text-xs mt-1.5 px-2 ${isDarkMode ? "text-slate-500" : "text-slate-400"} ${message.sender === "user" ? "text-right" : "text-left"}`}
+                        >
+                          {formatTime(message.timestamp)}
+                        </p>
+                      </div>
+                      {message.sender === "user" && (
+                        <div
+                          className={`w-8 h-8 flex-shrink-0 rounded-full flex items-center justify-center ${isDarkMode ? "bg-blue-600" : "bg-blue-500"}`}
+                        >
+                          <User className="w-5 h-5 text-white" />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+                <div ref={messagesEndRef} />
+              </div>
+
+              {/* Input */}
+              <div
+                className={`px-4 py-3 border-t ${isDarkMode ? "border-slate-700/50" : "border-slate-200/70"} flex-shrink-0`}
+              >
+                <div className="flex items-center space-x-2">
+                  <div className="flex-1 relative">
+                    <input
+                      ref={inputRef}
+                      type="text"
+                      value={inputValue}
+                      onChange={(e) => setInputValue(e.target.value)}
+                      onKeyPress={handleKeyPress}
+                      placeholder="Ask anything..."
+                      disabled={isLoading}
+                      className={`w-full px-4 py-2.5 transition-all duration-300 text-sm rounded-lg border ${
+                        isDarkMode
+                          ? "bg-slate-800 border-slate-700 text-slate-100 placeholder-slate-400 focus:ring-blue-500/50 focus:border-blue-500"
+                          : "bg-white border-slate-300 text-slate-800 placeholder-slate-400 focus:ring-blue-500/50 focus:border-blue-500"
+                      } focus:outline-none focus:ring-2`}
+                    />
+                  </div>
+
+                  <button
+                    onClick={handleSendMessage}
+                    disabled={!inputValue.trim() || isLoading}
+                    className={`p-2.5 rounded-lg transition-all duration-300 flex items-center justify-center ${
+                      !inputValue.trim() || isLoading
+                        ? isDarkMode
+                          ? "bg-slate-700 text-slate-500"
+                          : "bg-slate-200 text-slate-400"
+                        : isDarkMode
+                          ? "bg-blue-600 hover:bg-blue-500 text-white"
+                          : "bg-blue-500 hover:bg-blue-600 text-white"
+                    } disabled:cursor-not-allowed`}
+                  >
+                    {isLoading ? (
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                    ) : (
+                      <Send className="w-5 h-5" />
+                    )}
+                  </button>
                 </div>
-                <div>
-                  <h3 className={`text-md font-semibold ${isDarkMode ? 'text-slate-100' : 'text-slate-800'}`}>
-                    {botName}
-                  </h3>
-                  <p className={`text-xs ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
-                    AI Assistant
+                <div className={`mt-2 text-center`}>
+                  <p
+                    className={`text-xs ${isDarkMode ? "text-slate-500" : "text-slate-400"}`}
+                  >
+                    Powered by AI
                   </p>
                 </div>
               </div>
-              <div className="flex items-center space-x-1">
-                <button
-                  onClick={() => setIsMinimized(!isMinimized)}
-                  className={`p-2 rounded-lg transition-colors duration-200 ${
-                    isDarkMode 
-                      ? 'text-slate-400 hover:bg-slate-700/50 hover:text-slate-200' 
-                      : 'text-slate-500 hover:bg-slate-200/50 hover:text-slate-800'
-                  }`}
-                  aria-label={isMinimized ? "Maximize chat" : "Minimize chat"}
-                >
-                  {isMinimized ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
-                </button>
-                <button
-                  onClick={() => setIsOpen(false)}
-                  className={`p-2 rounded-lg transition-colors duration-200 ${
-                    isDarkMode 
-                      ? 'text-slate-400 hover:bg-red-500/20 hover:text-red-400' 
-                      : 'text-slate-500 hover:bg-red-100 hover:text-red-500'
-                  }`}
-                  aria-label="Close chat"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-            </div>
-
-            {/* Messages */}
-            {!isMinimized && (
-              <>
-                <div className={`flex-1 p-4 space-y-4 overflow-y-auto ${
-                  isDarkMode ? 'bg-slate-800/30' : 'bg-slate-100/30'
-                } [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-slate-400/50 dark:[&::-webkit-scrollbar-thumb]:bg-slate-600/50 [&::-webkit-scrollbar-thumb]:rounded-full`}>
-                  {messages.map((message) => (
-                    <div
-                      key={message.id}
-                      className={`flex message-bubble ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-                    >
-                      <div className={`flex items-start space-x-3 max-w-[80%]`}>
-                        {message.sender === 'bot' && (
-                           <div className={`w-8 h-8 flex-shrink-0 rounded-full flex items-center justify-center ${isDarkMode ? 'bg-slate-700' : 'bg-slate-200'}`}>
-                            <Bot className={`w-5 h-5 ${isDarkMode ? 'text-blue-400' : 'text-blue-500'}`} />
-                          </div>
-                        )}
-                        <div className="flex-1">
-                          <div className={`px-4 py-2.5 rounded-xl ${getMessageBubbleStyle(message.sender)}`}>
-                            {message.isTyping ? (
-                              <div className="flex items-center space-x-1.5">
-                                <div className="w-2 h-2 bg-current rounded-full animate-pulse"></div>
-                                <div className="w-2 h-2 bg-current rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-                                <div className="w-2 h-2 bg-current rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
-                              </div>
-                            ) : (
-                              <p className="text-sm leading-normal whitespace-pre-wrap">{message.content}</p>
-                            )}
-                          </div>
-                          <p className={`text-xs mt-1.5 px-2 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'} ${message.sender === 'user' ? 'text-right' : 'text-left'}`}>
-                            {formatTime(message.timestamp)}
-                          </p>
-                        </div>
-                         {message.sender === 'user' && (
-                           <div className={`w-8 h-8 flex-shrink-0 rounded-full flex items-center justify-center ${isDarkMode ? 'bg-blue-600' : 'bg-blue-500'}`}>
-                            <User className="w-5 h-5 text-white" />
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                  <div ref={messagesEndRef} />
-                </div>
-
-                {/* Input */}
-                <div className={`px-4 py-3 border-t ${isDarkMode ? 'border-slate-700/50' : 'border-slate-200/70'} flex-shrink-0`}>
-                  <div className="flex items-center space-x-2">
-                    <div className="flex-1 relative">
-                        <input
-                          ref={inputRef}
-                          type="text"
-                          value={inputValue}
-                          onChange={(e) => setInputValue(e.target.value)}
-                          onKeyPress={handleKeyPress}
-                          placeholder="Ask anything..."
-                          disabled={isLoading}
-                          className={`w-full px-4 py-2.5 transition-all duration-300 text-sm rounded-lg border ${
-                            isDarkMode
-                              ? 'bg-slate-800 border-slate-700 text-slate-100 placeholder-slate-400 focus:ring-blue-500/50 focus:border-blue-500'
-                              : 'bg-white border-slate-300 text-slate-800 placeholder-slate-400 focus:ring-blue-500/50 focus:border-blue-500'
-                          } focus:outline-none focus:ring-2`}
-                        />
-                    </div>
-                    
-                    <button
-                      onClick={handleSendMessage}
-                      disabled={!inputValue.trim() || isLoading}
-                      className={`p-2.5 rounded-lg transition-all duration-300 flex items-center justify-center ${
-                        !inputValue.trim() || isLoading
-                          ? (isDarkMode ? 'bg-slate-700 text-slate-500' : 'bg-slate-200 text-slate-400')
-                          : (isDarkMode ? 'bg-blue-600 hover:bg-blue-500 text-white' : 'bg-blue-500 hover:bg-blue-600 text-white')
-                      } disabled:cursor-not-allowed`}
-                    >
-                      {isLoading ? (
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                      ) : (
-                        <Send className="w-5 h-5" />
-                      )}
-                    </button>
-                  </div>
-                  <div className={`mt-2 text-center`}>
-                    <p className={`text-xs ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>
-                      Powered by AI
-                    </p>
-                  </div>
-                </div>
-              </>
-            )}
+            </>
+          )}
         </div>
       )}
     </>
