@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import FuturisticParticles from "../components/FuturisticParticles";
+import ChatBot from "../components/ChatBot";
 import {
   Menu,
   X,
@@ -965,6 +966,9 @@ const Dashboard = () => {
         </div>
       </section>
       <Contact isDarkMode={isDarkMode} />
+
+      {/* AI ChatBot */}
+      <ChatBot isDarkMode={isDarkMode} />
 
       {/* Floating Action Buttons */}
       <div className="fixed bottom-6 right-6 z-40 flex flex-row space-x-4">
