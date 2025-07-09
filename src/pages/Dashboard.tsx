@@ -21,6 +21,8 @@ import {
   TrendingUp,
   Award,
   Star,
+  Sun,
+  Moon,
 } from "lucide-react";
 import Contact from "../components/contact";
 
@@ -29,12 +31,46 @@ const Dashboard = () => {
   const [scrollY, setScrollY] = useState(0);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [activeProject, setActiveProject] = useState(0);
+  // Set default mode based on device preference
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    if (typeof window !== "undefined") {
+      return window.matchMedia("(prefers-color-scheme: dark)").matches;
+    }
+    return true; // fallback to dark mode
+  });
+  const [isManualOverride, setIsManualOverride] = useState(false);
+
+  // Utility function for glass card styling
+  const getGlassCardClass = () => {
+    return isDarkMode
+      ? "bg-white/5 backdrop-blur-sm border border-white/10"
+      : "bg-white backdrop-blur-sm border border-gray-200 shadow-lg";
+  };
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Listen for system theme changes (only if not manually overridden)
+  useEffect(() => {
+    if (isManualOverride) return;
+
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const handleChange = (e: MediaQueryListEvent) => {
+      setIsDarkMode(e.matches);
+    };
+
+    mediaQuery.addListener(handleChange);
+    return () => mediaQuery.removeListener(handleChange);
+  }, [isManualOverride]);
+
+  // Manual theme toggle function
+  const toggleTheme = () => {
+    setIsManualOverride(true);
+    setIsDarkMode(!isDarkMode);
+  };
 
   // Update time every second for dynamic effect
   useEffect(() => {
@@ -155,7 +191,7 @@ const Dashboard = () => {
       label: "Years Innovation",
       suffix: "+",
       icon: <Award className="w-6 h-6" />,
-      change: "",
+      change: "reliable",
     },
     {
       number: "200",
@@ -220,17 +256,21 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white overflow-x-hidden">
+    <div
+      className={`min-h-screen ${isDarkMode ? "bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white" : "bg-white text-gray-900"} overflow-x-hidden`}
+    >
       {/* Animated Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 left-0 w-full h-full">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse"></div>
           <div
-            className="absolute top-3/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse"
+            className={`absolute top-1/4 left-1/4 w-96 h-96 ${isDarkMode ? "bg-cyan-500/10" : "bg-gray-100/50"} rounded-full blur-3xl animate-pulse`}
+          ></div>
+          <div
+            className={`absolute top-3/4 right-1/4 w-96 h-96 ${isDarkMode ? "bg-purple-500/10" : "bg-gray-50/60"} rounded-full blur-3xl animate-pulse`}
             style={{ animationDelay: "1s" }}
           ></div>
           <div
-            className="absolute bottom-1/4 left-1/3 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl animate-pulse"
+            className={`absolute bottom-1/4 left-1/3 w-96 h-96 ${isDarkMode ? "bg-emerald-500/10" : "bg-gray-100/40"} rounded-full blur-3xl animate-pulse`}
             style={{ animationDelay: "2s" }}
           ></div>
         </div>
@@ -250,13 +290,25 @@ const Dashboard = () => {
 
       {/* Futuristic Header */}
       <header
-        className="fixed top-0 w-full z-50 transition-all duration-300  "
+        className="fixed top-0 w-full z-50 transition-all duration-300"
         style={{
-          background: scrollY > 50 ? "rgba(15, 23, 42, 0.95)" : "transparent",
+          background:
+            scrollY > 50
+              ? isDarkMode
+                ? "rgba(15, 23, 42, 0.95)"
+                : "rgba(255, 255, 255, 0.98)"
+              : "transparent",
           backdropFilter: scrollY > 50 ? "blur(20px)" : "none",
-
           borderBottom:
-            scrollY > 50 ? "1px solid rgba(255, 255, 255, 0.1)" : "none",
+            scrollY > 50
+              ? isDarkMode
+                ? "1px solid rgba(255, 255, 255, 0.1)"
+                : "1px solid rgba(0, 0, 0, 0.1)"
+              : "none",
+          boxShadow:
+            scrollY > 50 && !isDarkMode
+              ? "0 4px 20px rgba(0, 0, 0, 0.05)"
+              : "none",
         }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -271,7 +323,9 @@ const Dashboard = () => {
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
                   CB Construction
                 </h1>
-                <p className="text-sm text-gray-400">
+                <p
+                  className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-700"}`}
+                >
                   Future Building Solutions
                 </p>
               </div>
@@ -279,9 +333,29 @@ const Dashboard = () => {
 
             {/* Real-time Clock */}
             <div className="hidden lg:flex items-center space-x-6">
-              <div className="flex items-center space-x-2 px-4 py-2 bg-white/5 backdrop-blur-sm rounded-full border border-white/10">
+              {/* Dark/Light Mode Toggle */}
+              <button
+                onClick={toggleTheme}
+                className={`p-2 rounded-full transition-all duration-300 ${
+                  isDarkMode
+                    ? "bg-white/10 hover:bg-white/20 text-yellow-400"
+                    : "bg-gray-100 hover:bg-gray-200 text-gray-700 shadow-md border border-gray-200"
+                }`}
+                aria-label="Toggle theme"
+              >
+                {isDarkMode ? (
+                  <Sun className="w-5 h-5" />
+                ) : (
+                  <Moon className="w-5 h-5" />
+                )}
+              </button>
+              <div
+                className={`flex items-center space-x-2 px-4 py-2 ${isDarkMode ? "bg-white/5" : "bg-white"} backdrop-blur-xl rounded-full border ${isDarkMode ? "border-white/10" : "border-gray-200 shadow-md"}`}
+              >
                 <Clock className="w-4 h-4 text-cyan-400" />
-                <span className="text-sm text-gray-300 font-mono">
+                <span
+                  className={`text-sm ${isDarkMode ? "text-gray-300" : "text-gray-700"} font-mono`}
+                >
                   {currentTime.toLocaleTimeString("en-US", {
                     hour12: false,
                     hour: "2-digit",
@@ -299,7 +373,7 @@ const Dashboard = () => {
                   <a
                     key={item}
                     href={`#${item.toLowerCase()}`}
-                    className="relative text-gray-300 hover:text-cyan-400 font-medium transition-all duration-300 group"
+                    className={`relative ${isDarkMode ? "text-gray-300 hover:text-cyan-400" : "text-gray-700 hover:text-cyan-600"} font-medium transition-all duration-300 group`}
                     style={{ animationDelay: `${index * 0.1}s` }}
                   >
                     {item}
@@ -311,7 +385,7 @@ const Dashboard = () => {
 
             {/* Mobile Menu Button */}
             <button
-              className="md:hidden p-2 rounded-lg bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors"
+              className={`md:hidden p-2 rounded-lg ${isDarkMode ? "bg-white/10 hover:bg-white/20" : "bg-black/10 hover:bg-black/20"} transition-colors`}
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
               {isMenuOpen ? (
@@ -325,14 +399,39 @@ const Dashboard = () => {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden bg-slate-900/95 backdrop-blur-xl border-t border-white/10">
+          <div
+            className={`md:hidden ${isDarkMode ? "bg-slate-900/95" : "bg-white/98"} backdrop-blur-xl border-t ${isDarkMode ? "border-white/10" : "border-gray-200"} shadow-2xl`}
+          >
             <div className="px-4 pt-4 pb-6 space-y-3">
+              {/* Mobile Theme Toggle */}
+              <div className="flex justify-between items-center mb-4">
+                <span
+                  className={`text-sm ${isDarkMode ? "text-gray-300" : "text-gray-700"}`}
+                >
+                  Theme
+                </span>
+                <button
+                  onClick={toggleTheme}
+                  className={`p-2 rounded-full transition-all duration-300 ${
+                    isDarkMode
+                      ? "bg-white/10 hover:bg-white/20 text-yellow-400"
+                      : "bg-gray-100 hover:bg-gray-200 text-gray-700 shadow-md border border-gray-200"
+                  }`}
+                  aria-label="Toggle theme"
+                >
+                  {isDarkMode ? (
+                    <Sun className="w-4 h-4" />
+                  ) : (
+                    <Moon className="w-4 h-4" />
+                  )}
+                </button>
+              </div>
               {["Home", "Services", "Projects", "Technology", "Contact"].map(
                 (item) => (
                   <a
                     key={item}
                     href={`#${item.toLowerCase()}`}
-                    className="block px-4 py-3 text-gray-300 hover:text-cyan-400 hover:bg-white/5 rounded-lg transition-all duration-300"
+                    className={`block px-4 py-3 ${isDarkMode ? "text-gray-300 hover:text-cyan-400 hover:bg-white/5" : "text-gray-700 hover:text-cyan-600 hover:bg-gray-50 border border-transparent hover:border-gray-200"} rounded-xl transition-all duration-300`}
                     onClick={() => setIsMenuOpen(false)}
                   >
                     {item}
@@ -349,7 +448,9 @@ const Dashboard = () => {
         id="home"
         className="relative min-h-screen flex items-center justify-center pt-[100px] sm:pt-0"
       >
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-purple-900/20 to-slate-900/20"></div>
+        <div
+          className={`absolute inset-0 ${isDarkMode ? "bg-gradient-to-br from-blue-900/20 via-purple-900/20 to-slate-900/20" : "bg-gray-50/30"}`}
+        ></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="mb-8">
             <h2 className="text-6xl lg:text-8xl font-bold mb-6 leading-tight">
@@ -357,13 +458,19 @@ const Dashboard = () => {
                 Building
               </span>
               <br />
-              <span className="text-white">Tomorrow's</span>
+              <span
+                className={`${isDarkMode ? "text-white" : "text-gray-800"}`}
+              >
+                Tomorrow's
+              </span>
               <br />
               <span className="bg-gradient-to-r from-emerald-400 via-cyan-400 to-purple-400 bg-clip-text text-transparent">
                 Sri Lanka
               </span>
             </h2>
-            <p className="text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto mb-12 leading-relaxed">
+            <p
+              className={`text-xl lg:text-2xl ${isDarkMode ? "text-gray-300" : "text-gray-700"} max-w-4xl mx-auto mb-12 leading-relaxed`}
+            >
               Pioneering the future of construction with AI-powered smart
               buildings, sustainable technologies, and innovative design
               solutions that transform how we live, work, and connect.
@@ -377,7 +484,9 @@ const Dashboard = () => {
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </span>
             </button>
-            <button className="group relative px-8 py-4 glass-card rounded-full font-semibold text-white hover:bg-white/20 transition-all duration-300 transform hover:-translate-y-1 hover:scale-105">
+            <button
+              className={`group relative px-8 py-4 ${getGlassCardClass()} rounded-full font-semibold ${isDarkMode ? "text-white hover:bg-white/20" : "text-gray-800 hover:bg-gray-50 hover:shadow-xl"} transition-all duration-300 transform hover:-translate-y-1 hover:scale-105`}
+            >
               <span className="relative z-10 flex items-center">
                 Explore Portfolio
                 <Eye className="ml-2 w-5 h-5 group-hover:scale-110 transition-transform" />
@@ -390,16 +499,22 @@ const Dashboard = () => {
             {technologies.map((tech, index) => (
               <div
                 key={index}
-                className="group p-6 glass-card rounded-2xl hover:bg-white/10 transition-all duration-300 animate-float"
+                className={`group p-6 ${getGlassCardClass()} rounded-2xl ${isDarkMode ? "hover:bg-white/10" : "hover:bg-gray-50 hover:shadow-xl"} transition-all duration-300 animate-float`}
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <div className="text-cyan-400 mb-3 flex justify-center group-hover:scale-110 transition-transform">
                   {tech.icon}
                 </div>
-                <h3 className="text-sm font-semibold text-white mb-2">
+                <h3
+                  className={`text-sm font-semibold ${isDarkMode ? "text-white" : "text-gray-900"} mb-2`}
+                >
                   {tech.name}
                 </h3>
-                <p className="text-xs text-gray-400">{tech.description}</p>
+                <p
+                  className={`text-xs ${isDarkMode ? "text-gray-400" : "text-gray-700"}`}
+                >
+                  {tech.description}
+                </p>
               </div>
             ))}
           </div>
@@ -412,7 +527,9 @@ const Dashboard = () => {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
               <div key={index} className="text-center group">
-                <div className="relative p-8 glass-card rounded-2xl card-hover animate-pulse-glow hover:shadow-2xl hover:shadow-cyan-500/20">
+                <div
+                  className={`relative p-8 ${getGlassCardClass()} rounded-2xl card-hover animate-pulse-glow hover:shadow-2xl hover:shadow-cyan-500/20`}
+                >
                   <div className="flex justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
                     <div className="p-3 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 rounded-full border border-cyan-400/30">
                       <div className="text-cyan-400">{stat.icon}</div>
@@ -424,7 +541,9 @@ const Dashboard = () => {
                     </span>
                     <span className="text-cyan-400">{stat.suffix}</span>
                   </div>
-                  <div className="text-gray-300 font-medium mb-2">
+                  <div
+                    className={`${isDarkMode ? "text-gray-300" : "text-gray-800"} font-medium mb-2`}
+                  >
                     {stat.label}
                   </div>
                   {stat.change && (
@@ -452,7 +571,9 @@ const Dashboard = () => {
                 Awards & Recognition
               </span>
             </h2>
-            <p className="text-lg text-gray-300 max-w-2xl mx-auto">
+            <p
+              className={`text-lg ${isDarkMode ? "text-gray-300" : "text-gray-700"} max-w-2xl mx-auto`}
+            >
               Celebrating excellence and innovation in construction technology
             </p>
           </div>
@@ -461,16 +582,20 @@ const Dashboard = () => {
             {achievements.map((achievement, index) => (
               <div
                 key={index}
-                className="group relative p-6 glass-card rounded-2xl card-hover animate-float"
+                className={`group relative p-6 ${getGlassCardClass()} rounded-2xl card-hover animate-float`}
                 style={{ animationDelay: `${index * 0.2}s` }}
               >
                 <div className="flex justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
                   {achievement.icon}
                 </div>
-                <h3 className="text-lg font-bold text-white mb-2 text-center">
+                <h3
+                  className={`text-lg font-bold ${isDarkMode ? "text-white" : "text-gray-900"} mb-2 text-center`}
+                >
                   {achievement.title}
                 </h3>
-                <p className="text-sm text-gray-400 text-center">
+                <p
+                  className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-700"} text-center`}
+                >
                   {achievement.organization}
                 </p>
                 <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/10 to-orange-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -489,7 +614,9 @@ const Dashboard = () => {
                 Future Services
               </span>
             </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p
+              className={`text-xl ${isDarkMode ? "text-gray-300" : "text-gray-600"} max-w-3xl mx-auto`}
+            >
               Revolutionary construction solutions powered by cutting-edge
               technology and sustainable innovation
             </p>
@@ -499,7 +626,7 @@ const Dashboard = () => {
             {services.map((service, index) => (
               <div
                 key={index}
-                className="group relative p-8 glass-card rounded-3xl card-hover hover:shadow-2xl hover:shadow-cyan-500/20"
+                className={`group relative p-8 ${getGlassCardClass()} rounded-3xl card-hover hover:shadow-2xl hover:shadow-cyan-500/20`}
               >
                 <div
                   className={`absolute inset-0 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 ${
@@ -537,17 +664,21 @@ const Dashboard = () => {
                       </div>
                     </div>
                   </div>
-                  <h3 className="text-2xl font-bold text-white mb-4">
+                  <h3
+                    className={`text-2xl font-bold ${isDarkMode ? "text-white" : "text-gray-900"} mb-4`}
+                  >
                     {service.title}
                   </h3>
-                  <p className="text-gray-300 leading-relaxed mb-6">
+                  <p
+                    className={`${isDarkMode ? "text-gray-300" : "text-gray-700"} leading-relaxed mb-6`}
+                  >
                     {service.description}
                   </p>
                   <div className="flex flex-wrap gap-2 mb-4">
                     {service.features.map((feature, idx) => (
                       <span
                         key={idx}
-                        className={`px-3 py-1 bg-white/10 rounded-full text-sm border transition-colors ${
+                        className={`px-3 py-1 ${isDarkMode ? "bg-white/10" : "bg-gray-100"} rounded-full text-sm border transition-colors ${
                           service.color === "cyan"
                             ? "text-cyan-400 border-cyan-400/20 hover:bg-cyan-400/10"
                             : service.color === "purple"
@@ -591,7 +722,9 @@ const Dashboard = () => {
                 Featured Projects
               </span>
             </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p
+              className={`text-xl ${isDarkMode ? "text-gray-300" : "text-gray-600"} max-w-3xl mx-auto`}
+            >
               Showcasing our commitment to innovation and excellence in every
               smart building we create
             </p>
@@ -601,7 +734,7 @@ const Dashboard = () => {
             {projects.map((project, index) => (
               <div
                 key={index}
-                className={`group relative glass-card rounded-3xl overflow-hidden card-hover hover:shadow-2xl hover:shadow-cyan-500/20 ${
+                className={`group relative ${getGlassCardClass()} rounded-3xl overflow-hidden card-hover hover:shadow-2xl hover:shadow-cyan-500/20 ${
                   index === activeProject
                     ? "ring-2 ring-cyan-400/50 shadow-xl shadow-cyan-500/30 animate-glow"
                     : ""
@@ -636,22 +769,32 @@ const Dashboard = () => {
                   <div className="text-sm text-cyan-400 font-semibold mb-2">
                     {project.category}
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-3">
+                  <h3
+                    className={`text-xl font-bold ${isDarkMode ? "text-white" : "text-gray-800"} mb-3`}
+                  >
                     {project.title}
                   </h3>
-                  <p className="text-gray-300 mb-4 text-sm leading-relaxed">
+                  <p
+                    className={`${isDarkMode ? "text-gray-300" : "text-gray-600"} mb-4 text-sm leading-relaxed`}
+                  >
                     {project.description}
                   </p>
 
                   {/* Progress Bar */}
                   <div className="mb-4">
                     <div className="flex justify-between items-center mb-2">
-                      <span className="text-sm text-gray-400">Progress</span>
+                      <span
+                        className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}
+                      >
+                        Progress
+                      </span>
                       <span className="text-sm font-semibold text-cyan-400">
                         {project.progress}%
                       </span>
                     </div>
-                    <div className="w-full bg-gray-700 rounded-full h-2">
+                    <div
+                      className={`w-full ${isDarkMode ? "bg-gray-700" : "bg-gradient-to-r from-orange-100 to-amber-100"} rounded-full h-2`}
+                    >
                       <div
                         className="bg-gradient-to-r from-cyan-400 to-emerald-400 h-2 rounded-full progress-bar"
                         style={{ width: `${project.progress}%` }}
@@ -663,14 +806,16 @@ const Dashboard = () => {
                     {project.tech.map((tech, idx) => (
                       <span
                         key={idx}
-                        className="px-2 py-1 bg-white/10 rounded-lg text-xs text-emerald-400 border border-emerald-400/20 hover:bg-emerald-400/10 transition-colors"
+                        className={`px-2 py-1 ${isDarkMode ? "bg-white/10" : "bg-gradient-to-r from-orange-50 to-amber-50 shadow-sm"} rounded-lg text-xs text-emerald-400 border border-emerald-400/20 hover:bg-emerald-400/10 transition-colors`}
                       >
                         {tech}
                       </span>
                     ))}
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-400">
+                    <span
+                      className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}
+                    >
                       Completion: {project.completion}
                     </span>
                     <button className="text-cyan-400 hover:text-cyan-300 font-semibold flex items-center text-sm group/btn">
@@ -695,7 +840,9 @@ const Dashboard = () => {
                   Innovation Since 1999
                 </span>
               </h2>
-              <p className="text-lg text-gray-300 mb-8 leading-relaxed">
+              <p
+                className={`text-lg ${isDarkMode ? "text-gray-300" : "text-gray-600"} mb-8 leading-relaxed`}
+              >
                 At CB Construction, we're not just building structures—we're
                 architecting the future. Our integration of artificial
                 intelligence, sustainable technologies, and smart systems
@@ -707,10 +854,14 @@ const Dashboard = () => {
                     <CheckCircle className="w-6 h-6 text-emerald-400" />
                   </div>
                   <div>
-                    <span className="text-white font-semibold">
+                    <span
+                      className={`${isDarkMode ? "text-white" : "text-gray-800"} font-semibold`}
+                    >
                       AI-Powered Building Management
                     </span>
-                    <p className="text-gray-400 text-sm">
+                    <p
+                      className={`${isDarkMode ? "text-gray-400" : "text-gray-600"} text-sm`}
+                    >
                       Intelligent systems that optimize energy, security, and
                       comfort
                     </p>
@@ -721,10 +872,14 @@ const Dashboard = () => {
                     <CheckCircle className="w-6 h-6 text-cyan-400" />
                   </div>
                   <div>
-                    <span className="text-white font-semibold">
+                    <span
+                      className={`${isDarkMode ? "text-white" : "text-gray-800"} font-semibold`}
+                    >
                       Sustainable Technology Integration
                     </span>
-                    <p className="text-gray-400 text-sm">
+                    <p
+                      className={`${isDarkMode ? "text-gray-400" : "text-gray-600"} text-sm`}
+                    >
                       Carbon-neutral solutions with renewable energy systems
                     </p>
                   </div>
@@ -734,10 +889,14 @@ const Dashboard = () => {
                     <CheckCircle className="w-6 h-6 text-purple-400" />
                   </div>
                   <div>
-                    <span className="text-white font-semibold">
+                    <span
+                      className={`${isDarkMode ? "text-white" : "text-gray-800"} font-semibold`}
+                    >
                       Smart City Integration
                     </span>
-                    <p className="text-gray-400 text-sm">
+                    <p
+                      className={`${isDarkMode ? "text-gray-400" : "text-gray-600"} text-sm`}
+                    >
                       Buildings that connect and communicate with urban
                       infrastructure
                     </p>
@@ -746,7 +905,9 @@ const Dashboard = () => {
               </div>
             </div>
             <div className="relative">
-              <div className="relative p-8 bg-white/5 backdrop-blur-sm rounded-3xl border border-white/10">
+              <div
+                className={`relative p-8 ${isDarkMode ? "bg-white/5" : "bg-white/80"} backdrop-blur-sm rounded-3xl border ${isDarkMode ? "border-white/10" : "border-black/10"}`}
+              >
                 <img
                   src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=600&h=400&fit=crop"
                   alt="Future construction technology"
@@ -781,7 +942,18 @@ const Dashboard = () => {
       </div>
 
       {/* Footer */}
-      <footer className="py-16 relative border-t border-white/10">
+      <footer
+        className={`py-16 relative border-t ${isDarkMode ? "border-white/10" : "border-orange-200/40"}`}
+        style={
+          !isDarkMode
+            ? {
+                borderTopColor: "rgba(251, 146, 60, 0.2)",
+                background:
+                  "linear-gradient(to bottom, transparent 0%, rgba(254, 243, 226, 0.3) 100%)",
+              }
+            : {}
+        }
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-4 gap-8">
             <div className="md:col-span-2">
@@ -794,10 +966,16 @@ const Dashboard = () => {
                   <h3 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
                     CB Construction
                   </h3>
-                  <p className="text-gray-400">Future Building Solutions</p>
+                  <p
+                    className={`${isDarkMode ? "text-gray-400" : "text-gray-600"}`}
+                  >
+                    Future Building Solutions
+                  </p>
                 </div>
               </div>
-              <p className="text-gray-300 mb-6 max-w-md">
+              <p
+                className={`${isDarkMode ? "text-gray-300" : "text-gray-600"} mb-6 max-w-md`}
+              >
                 Pioneering the future of construction with smart technologies,
                 sustainable solutions, and innovative design that transforms how
                 we build and live.
@@ -805,10 +983,14 @@ const Dashboard = () => {
             </div>
 
             <div>
-              <h4 className="text-lg font-semibold text-white mb-6">
+              <h4
+                className={`text-lg font-semibold ${isDarkMode ? "text-white" : "text-gray-800"} mb-6`}
+              >
                 Future Services
               </h4>
-              <ul className="space-y-3 text-gray-400">
+              <ul
+                className={`space-y-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}
+              >
                 <li>
                   <a href="#" className="hover:text-cyan-400 transition-colors">
                     Smart Buildings
@@ -833,10 +1015,14 @@ const Dashboard = () => {
             </div>
 
             <div>
-              <h4 className="text-lg font-semibold text-white mb-6">
+              <h4
+                className={`text-lg font-semibold ${isDarkMode ? "text-white" : "text-gray-800"} mb-6`}
+              >
                 Innovation Hub
               </h4>
-              <ul className="space-y-3 text-gray-400">
+              <ul
+                className={`space-y-3 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}
+              >
                 <li>
                   <a href="#" className="hover:text-cyan-400 transition-colors">
                     Technology
@@ -861,8 +1047,10 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className="border-t border-white/10 mt-12 pt-8 text-center">
-            <p className="text-gray-400">
+          <div
+            className={`border-t ${isDarkMode ? "border-white/10" : "border-black/10"} mt-12 pt-8 text-center`}
+          >
+            <p className={`${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
               &copy; 2025 CB Construction Sri Lanka. Building Tomorrow, Today.
             </p>
           </div>
