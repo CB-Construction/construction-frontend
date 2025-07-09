@@ -72,6 +72,20 @@ const Dashboard = () => {
     setIsDarkMode(!isDarkMode);
   };
 
+  // Smooth scroll to section function
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      // Update URL with hash
+      window.history.pushState(null, "", `#${sectionId}`);
+      // Smooth scroll to element
+      element.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  };
+
   // Update time every second for dynamic effect
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -84,6 +98,35 @@ const Dashboard = () => {
       setActiveProject((prev) => (prev + 1) % projects.length);
     }, 5000);
     return () => clearInterval(timer);
+  }, []);
+
+  // Handle direct navigation to hash URLs
+  useEffect(() => {
+    const handleHashNavigation = () => {
+      const hash = window.location.hash.replace("#", "");
+      if (hash) {
+        // Small delay to ensure the page has loaded
+        setTimeout(() => {
+          const element = document.getElementById(hash);
+          if (element) {
+            element.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          }
+        }, 100);
+      }
+    };
+
+    // Handle initial load
+    handleHashNavigation();
+
+    // Handle browser back/forward navigation
+    window.addEventListener("popstate", handleHashNavigation);
+
+    return () => {
+      window.removeEventListener("popstate", handleHashNavigation);
+    };
   }, []);
 
   const services = [
@@ -370,15 +413,15 @@ const Dashboard = () => {
             <nav className="hidden md:flex space-x-8">
               {["Home", "Services", "Projects", "Technology", "Contact"].map(
                 (item, index) => (
-                  <a
+                  <button
                     key={item}
-                    href={`#${item.toLowerCase()}`}
+                    onClick={() => scrollToSection(item.toLowerCase())}
                     className={`relative ${isDarkMode ? "text-gray-300 hover:text-cyan-400" : "text-gray-700 hover:text-cyan-600"} font-medium transition-all duration-300 group`}
                     style={{ animationDelay: `${index * 0.1}s` }}
                   >
                     {item}
                     <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-400 to-purple-400 group-hover:w-full transition-all duration-300"></span>
-                  </a>
+                  </button>
                 )
               )}
             </nav>
@@ -428,14 +471,16 @@ const Dashboard = () => {
               </div>
               {["Home", "Services", "Projects", "Technology", "Contact"].map(
                 (item) => (
-                  <a
+                  <button
                     key={item}
-                    href={`#${item.toLowerCase()}`}
-                    className={`block px-4 py-3 ${isDarkMode ? "text-gray-300 hover:text-cyan-400 hover:bg-white/5" : "text-gray-700 hover:text-cyan-600 hover:bg-gray-50 border border-transparent hover:border-gray-200"} rounded-xl transition-all duration-300`}
-                    onClick={() => setIsMenuOpen(false)}
+                    onClick={() => {
+                      scrollToSection(item.toLowerCase());
+                      setIsMenuOpen(false);
+                    }}
+                    className={`block w-full text-left px-4 py-3 ${isDarkMode ? "text-gray-300 hover:text-cyan-400 hover:bg-white/5" : "text-gray-700 hover:text-cyan-600 hover:bg-gray-50 border border-transparent hover:border-gray-200"} rounded-xl transition-all duration-300`}
                   >
                     {item}
-                  </a>
+                  </button>
                 )
               )}
             </div>
@@ -793,7 +838,7 @@ const Dashboard = () => {
                       </span>
                     </div>
                     <div
-                      className={`w-full ${isDarkMode ? "bg-gray-700" : "bg-gray-200"} rounded-full h-2`}
+                      className={`w-full ${isDarkMode ? "bg-gray-700" : "bg-gradient-to-r from-orange-100 to-amber-100"} rounded-full h-2`}
                     >
                       <div
                         className="bg-gradient-to-r from-cyan-400 to-emerald-400 h-2 rounded-full progress-bar"
