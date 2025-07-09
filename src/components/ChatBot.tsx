@@ -208,7 +208,7 @@ const ChatBot = ({
           aria-label="Open AI Assistant"
         >
           <Bot
-            className={`w-8 h-8 transition-colors duration-300 ${isDarkMode ? "text-slate-300 group-hover:text-white" : "text-slate-600 group-hover:text-slate-800"}`}
+            className={`w-8 h-8 transition-colors duration-300 ${isDarkMode ? "text-slate-300 group-hover:text-white" : "text-slate-100 group-hover:text-slate-400"}`}
           />
           <div className="absolute top-0 right-0 w-4 h-4 bg-blue-500 rounded-full border-2 border-white dark:border-slate-800 animate-pulse"></div>
         </button>
@@ -234,12 +234,12 @@ const ChatBot = ({
               </div>
               <div>
                 <h3
-                  className={`text-md font-semibold ${isDarkMode ? "text-slate-100" : "text-slate-800"}`}
+                  className={`text-md font-semibold ${isDarkMode ? "text-slate-100" : "text-slate-300"}`}
                 >
                   {botName}
                 </h3>
                 <p
-                  className={`text-xs ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}
+                  className={`text-xs ${isDarkMode ? "text-slate-400" : "text-slate-200"}`}
                 >
                   AI Assistant
                 </p>
@@ -262,7 +262,7 @@ const ChatBot = ({
                 className={`p-2 rounded-lg transition-colors duration-200 ${
                   isDarkMode
                     ? "text-slate-400 hover:bg-red-500/20 hover:text-red-400"
-                    : "text-slate-500 hover:bg-red-100 hover:text-red-500"
+                    : "text-slate-200 hover:bg-red-100 hover:text-red-500"
                 }`}
                 aria-label="Close chat"
               >
