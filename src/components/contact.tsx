@@ -19,7 +19,7 @@ export default function Contact({ isDarkMode = true }: ContactProps) {
               </span>
             </h2>
             <p
-              className={`text-xl ${isDarkMode ? "text-gray-300" : "text-gray-700"} max-w-3xl mx-auto`}
+              className={`text-xl ${isDarkMode ? "text-gray-300" : "text-gray-800"} max-w-3xl mx-auto`}
             >
               Ready to transform your vision into reality? Connect with our team
               of innovation experts
@@ -45,7 +45,7 @@ export default function Contact({ isDarkMode = true }: ContactProps) {
                       Smart Connect
                     </div>
                     <div
-                      className={`${isDarkMode ? "text-gray-300" : "text-gray-700"}`}
+                      className={`${isDarkMode ? "text-gray-300" : "text-gray-800"}`}
                     >
                       ${phone_no}
                     </div>
@@ -65,7 +65,7 @@ export default function Contact({ isDarkMode = true }: ContactProps) {
                       Digital Hub
                     </div>
                     <div
-                      className={`${isDarkMode ? "text-gray-300" : "text-gray-700"}`}
+                      className={`${isDarkMode ? "text-gray-300" : "text-gray-800"}`}
                     >
                       future@cbconstruction.lk
                     </div>
@@ -85,7 +85,7 @@ export default function Contact({ isDarkMode = true }: ContactProps) {
                       Innovation Center
                     </div>
                     <div
-                      className={`${isDarkMode ? "text-gray-300" : "text-gray-700"}`}
+                      className={`${isDarkMode ? "text-gray-300" : "text-gray-800"}`}
                     >
                       123 Future Avenue
                       <br />
@@ -113,19 +113,19 @@ export default function Contact({ isDarkMode = true }: ContactProps) {
                   <input
                     type="text"
                     placeholder="First Name"
-                    className={`px-3 py-2 sm:px-4 sm:py-3 ${isDarkMode ? "bg-white/10 text-white placeholder-gray-400 border-white/20" : "bg-gray-50 text-gray-900 placeholder-gray-500 border-gray-300"} backdrop-blur-sm border rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-400/50 focus:border-cyan-400/50 transition-all`}
+                    className={`px-3 py-2 sm:px-4 sm:py-3 ${isDarkMode ? "bg-white/10 text-white placeholder-gray-400 border-white/20" : "bg-gray-50 text-gray-900 placeholder-gray-600 border-gray-300"} backdrop-blur-sm border rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-400/50 focus:border-cyan-400/50 transition-all`}
                   />
                   <input
                     type="text"
                     placeholder="Last Name"
-                    className={`px-3 py-2 sm:px-4 sm:py-3 ${isDarkMode ? "bg-white/10 text-white placeholder-gray-400 border-white/20" : "bg-gray-50 text-gray-900 placeholder-gray-500 border-gray-300"} backdrop-blur-sm border rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-400/50 focus:border-cyan-400/50 transition-all`}
+                    className={`px-3 py-2 sm:px-4 sm:py-3 ${isDarkMode ? "bg-white/10 text-white placeholder-gray-400 border-white/20" : "bg-gray-50 text-gray-900 placeholder-gray-600 border-gray-300"} backdrop-blur-sm border rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-400/50 focus:border-cyan-400/50 transition-all`}
                   />
                 </div>
                 <div>
                   <input
                     type="email"
                     placeholder="Your Email"
-                    className={`w-full px-3 py-2 sm:px-4 sm:py-3 ${isDarkMode ? "bg-white/10 text-white placeholder-gray-400 border-white/20" : "bg-gray-50 text-gray-900 placeholder-gray-500 border-gray-300"} backdrop-blur-sm border rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-400/50 focus:border-cyan-400/50 transition-all`}
+                    className={`w-full px-3 py-2 sm:px-4 sm:py-3 ${isDarkMode ? "bg-white/10 text-white placeholder-gray-400 border-white/20" : "bg-gray-50 text-gray-900 placeholder-gray-600 border-gray-300"} backdrop-blur-sm border rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-400/50 focus:border-cyan-400/50 transition-all`}
                   />
                 </div>
                 <div>
@@ -145,7 +145,7 @@ export default function Contact({ isDarkMode = true }: ContactProps) {
                   <textarea
                     rows={4}
                     placeholder="Tell us about your vision..."
-                    className={`w-full px-3 py-2 sm:px-4 sm:py-3 ${isDarkMode ? "bg-white/10 text-white placeholder-gray-400 border-white/20" : "bg-gray-50 text-gray-900 placeholder-gray-500 border-gray-300"} backdrop-blur-sm border rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-400/50 focus:border-cyan-400/50 transition-all resize-none`}
+                    className={`w-full px-3 py-2 sm:px-4 sm:py-3 ${isDarkMode ? "bg-white/10 text-white placeholder-gray-400 border-white/20" : "bg-gray-50 text-gray-900 placeholder-gray-600 border-gray-300"} backdrop-blur-sm border rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-400/50 focus:border-cyan-400/50 transition-all resize-none`}
                   ></textarea>
                 </div>
                 <button className="w-full py-2.5 sm:py-3 btn-glow bg-gradient-to-r from-cyan-500 to-purple-500 rounded-xl font-semibold text-white shadow-2xl hover:shadow-cyan-500/25 transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center group text-base sm:text-lg">
