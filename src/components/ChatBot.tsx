@@ -174,31 +174,37 @@ const ChatBot = ({
     <>
       <style>{`
         @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+          from { opacity: 0; transform: translateY(10px); }
+          to   { opacity: 1; transform: translateY(0); }
         }
         .chat-window {
           transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
-        .message-bubble {
-          animation: fadeInUp 0.5s ease-out forwards;
+        .message-bubble { animation: fadeInUp 0.5s ease-out forwards; }
+        /* Futuristic styles */
+        @keyframes gradientShift {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        .futuristic-button {
+          background: linear-gradient(45deg, #00fffa, #007cff, #d500f9);
+          background-size: 200% 200%;
+          animation: gradientShift 4s ease infinite;
+          box-shadow: 0 0 12px rgba(0,255,250,0.7), 0 0 24px rgba(213,0,249,0.5);
+        }
+        .futuristic-window {
+          border: 1px solid rgba(0,255,250,0.6);
+          box-shadow: 0 0 16px rgba(0,255,250,0.5);
+          backdrop-filter: blur(24px);
+          background: rgba(10,10,30,0.8);
         }
       `}</style>
       {/* Chat Toggle Button */}
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className={`fixed bottom-5 left-5 z-50 flex items-center justify-center w-16 h-16 rounded-full shadow-lg transition-all duration-300 transform hover:scale-110 group ${
-            isDarkMode
-              ? "bg-slate-800 hover:bg-slate-700"
-              : "bg-white hover:bg-slate-100"
-          } border ${isDarkMode ? 'border-slate-700' : 'border-slate-200'}`}
+          className={`fixed bottom-5 left-5 z-50 flex items-center justify-center w-16 h-16 rounded-full transition-transform duration-300 transform hover:scale-110 group futuristic-button`}
           aria-label="Open AI Assistant"
         >
           <Bot className={`w-8 h-8 transition-colors duration-300 ${isDarkMode ? 'text-slate-300 group-hover:text-white' : 'text-slate-600 group-hover:text-slate-800'}`} />
@@ -208,9 +214,9 @@ const ChatBot = ({
 
       {/* Chat Window */}
       {isOpen && (
-        <div className={`chat-window fixed inset-0 sm:inset-auto sm:bottom-5 sm:left-5 z-50 w-full h-full sm:w-[400px] sm:max-h-[calc(100vh-40px)] flex flex-col ${getGlassStyle()} sm:rounded-2xl overflow-hidden ${
+        <div className={`chat-window futuristic-window fixed inset-0 sm:inset-auto sm:bottom-5 sm:left-5 z-50 w-full h-full sm:w-[400px] sm:max-h-[calc(100vh-40px)] flex flex-col ${getGlassStyle()} sm:rounded-2xl overflow-hidden ${
           isMinimized ? 'sm:h-16' : 'sm:h-[600px]'
-        } ${isOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}`}>
+        } ${isOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}`}>            
             {/* Header */}
             <div className={`flex items-center justify-between px-4 py-3 border-b ${
               isDarkMode ? 'border-slate-700/50' : 'border-slate-200/70'
