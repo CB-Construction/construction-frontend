@@ -1,36 +1,40 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import FuturisticParticles from "../components/FuturisticParticles";
-import ChatBot from "../components/ChatBot";
 import {
-  Menu,
-  X,
   Building,
   Users,
-  Phone,
-  Mail,
-  ArrowRight,
-  CheckCircle,
   Truck,
-  HardHat,
   Wrench,
-  Eye,
-  Target,
-  Zap,
+  Award,
+  TrendingUp,
   Shield,
   Sparkles,
-  Clock,
-  TrendingUp,
-  Award,
   Star,
-  Sun,
-  Moon,
+  Eye,
+  Zap,
+  Target,
+  ArrowRight,
+  CheckCircle,
+  Phone,
+  Mail,
+  HardHat,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import Contact from "../components/contact";
+import ChatBot from "../components/ChatBot";
+import Header from "../components/Header";
+import {
+  getUserData,
+  getAuthToken,
+  clearAuthCookies,
+  isAuthenticated,
+} from "../utils/cookies";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+  const [user, setUser] = useState<any | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrollY, setScrollY] = useState(0);
-  const [currentTime, setCurrentTime] = useState(new Date());
   const [activeProject, setActiveProject] = useState(0);
   // Set default mode based on device preference
   const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -40,6 +44,69 @@ const Dashboard = () => {
     return true; // fallback to dark mode
   });
   const [isManualOverride, setIsManualOverride] = useState(false);
+  useEffect(() => {
+    console.log("🔍 Dashboard: Checking authentication state...");
+
+    // Use cookie-based authentication
+    const userData = getUserData();
+    const authToken = getAuthToken();
+    const authenticated = isAuthenticated();
+
+    console.log("Dashboard cookie check:");
+    console.log("  - User data from cookies:", userData);
+    console.log("  - Auth token exists:", !!authToken);
+    console.log("  - Is authenticated:", authenticated);
+
+    if (authenticated && userData) {
+      console.log(
+        "✅ Dashboard: Successfully retrieved user data from cookies:",
+        userData
+      );
+      setUser(userData);
+
+      // Additional verification
+      console.log("✅ User state set in Dashboard:", {
+        username: userData.username,
+        email: userData.email,
+        role: userData.role,
+        hasToken: !!authToken,
+      });
+    } else {
+      console.log(
+        "⚠️  Dashboard: No complete authentication data found in cookies"
+      );
+      if (!userData) console.log("  - Missing user data in cookies");
+      if (!authToken) console.log("  - Missing auth token in cookies");
+      setUser(null);
+    }
+
+    // Temporary test user for debugging (uncomment to test)
+    // const testUser = { username: "testuser", email: "test@example.com", role: "Client" };
+    // setUser(testUser);
+    // console.log('Dashboard: Test user set:', testUser);
+  }, []);
+
+  const handleLogout = () => {
+    console.log("🚪 Logout initiated...");
+
+    // Clear all authentication cookies
+    clearAuthCookies();
+
+    // Verify cleanup
+    const remainingUser = getUserData();
+    const remainingToken = getAuthToken();
+
+    console.log("✅ Logout verification:");
+    console.log("  - User cleared:", !remainingUser);
+    console.log("  - Token cleared:", !remainingToken);
+
+    // Reset state
+    setUser(null);
+
+    // Navigate to signin
+    console.log("🔄 Redirecting to signin...");
+    navigate("/signin");
+  };
 
   // Utility function for glass card styling
   const getGlassCardClass = () => {
@@ -86,12 +153,6 @@ const Dashboard = () => {
       });
     }
   };
-
-  // Update time every second for dynamic effect
-  useEffect(() => {
-    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
-    return () => clearInterval(timer);
-  }, []);
 
   // Auto-rotate featured projects
   useEffect(() => {
@@ -332,162 +393,17 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Futuristic Header */}
-      <header
-        className="fixed top-0 w-full z-50 transition-all duration-300"
-        style={{
-          background:
-            scrollY > 50
-              ? isDarkMode
-                ? "rgba(15, 23, 42, 0.95)"
-                : "rgba(255, 255, 255, 0.98)"
-              : "transparent",
-          backdropFilter: scrollY > 50 ? "blur(20px)" : "none",
-          borderBottom:
-            scrollY > 50
-              ? isDarkMode
-                ? "1px solid rgba(255, 255, 255, 0.1)"
-                : "1px solid rgba(0, 0, 0, 0.1)"
-              : "none",
-          boxShadow:
-            scrollY > 50 && !isDarkMode
-              ? "0 4px 20px rgba(0, 0, 0, 0.05)"
-              : "none",
-        }}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
-            <div className="flex items-center group">
-              <div className="relative">
-                <HardHat className="w-12 h-12 text-cyan-400 group-hover:text-cyan-300 transition-colors duration-300" />
-                <div className="absolute inset-0 bg-cyan-400/20 rounded-full blur-xl group-hover:blur-2xl transition-all duration-300"></div>
-                <div className="absolute -top-1 -right-1 w-4 h-4 bg-emerald-400 rounded-full animate-pulse"></div>
-              </div>
-              <div className="ml-4">
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
-                  CB Construction
-                </h1>
-                <p
-                  className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-700"}`}
-                >
-                  Future Building Solutions
-                </p>
-              </div>
-            </div>
-
-            {/* Real-time Clock */}
-            <div className="hidden lg:flex items-center space-x-6">
-              {/* Dark/Light Mode Toggle */}
-              <button
-                onClick={toggleTheme}
-                className={`p-2 rounded-full transition-all duration-300 ${
-                  isDarkMode
-                    ? "bg-white/10 hover:bg-white/20 text-yellow-400"
-                    : "bg-gray-100 hover:bg-gray-200 text-gray-700 shadow-md border border-gray-200"
-                }`}
-                aria-label="Toggle theme"
-              >
-                {isDarkMode ? (
-                  <Sun className="w-5 h-5" />
-                ) : (
-                  <Moon className="w-5 h-5" />
-                )}
-              </button>
-              <div
-                className={`flex items-center space-x-2 px-4 py-2 ${isDarkMode ? "bg-white/5" : "bg-white"} backdrop-blur-xl rounded-full border ${isDarkMode ? "border-white/10" : "border-gray-200 shadow-md"}`}
-              >
-                <Clock className="w-4 h-4 text-cyan-400" />
-                <span
-                  className={`text-sm ${isDarkMode ? "text-gray-300" : "text-gray-700"} font-mono`}
-                >
-                  {currentTime.toLocaleTimeString("en-US", {
-                    hour12: false,
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    second: "2-digit",
-                  })}
-                </span>
-              </div>
-            </div>
-
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex space-x-8">
-              {["Home", "Services", "Projects", "Technology", "Contact"].map(
-                (item, index) => (
-                  <button
-                    key={item}
-                    onClick={() => scrollToSection(item.toLowerCase())}
-                    className={`relative ${isDarkMode ? "text-gray-300 hover:text-cyan-400" : "text-gray-700 hover:text-cyan-600"} font-medium transition-all duration-300 group`}
-                    style={{ animationDelay: `${index * 0.1}s` }}
-                  >
-                    {item}
-                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-400 to-purple-400 group-hover:w-full transition-all duration-300"></span>
-                  </button>
-                )
-              )}
-            </nav>
-
-            {/* Mobile Menu Button */}
-            <button
-              className={`md:hidden p-2 rounded-lg ${isDarkMode ? "bg-white/10 hover:bg-white/20" : "bg-black/10 hover:bg-black/20"} transition-colors`}
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              {isMenuOpen ? (
-                <X className="w-6 h-6" />
-              ) : (
-                <Menu className="w-6 h-6" />
-              )}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Navigation */}
-        {isMenuOpen && (
-          <div
-            className={`md:hidden ${isDarkMode ? "bg-slate-900/95" : "bg-white/98"} backdrop-blur-xl border-t ${isDarkMode ? "border-white/10" : "border-gray-200"} shadow-2xl`}
-          >
-            <div className="px-4 pt-4 pb-6 space-y-3">
-              {/* Mobile Theme Toggle */}
-              <div className="flex justify-between items-center mb-4">
-                <span
-                  className={`text-sm ${isDarkMode ? "text-gray-300" : "text-gray-700"}`}
-                >
-                  Theme
-                </span>
-                <button
-                  onClick={toggleTheme}
-                  className={`p-2 rounded-full transition-all duration-300 ${
-                    isDarkMode
-                      ? "bg-white/10 hover:bg-white/20 text-yellow-400"
-                      : "bg-gray-100 hover:bg-gray-200 text-gray-700 shadow-md border border-gray-200"
-                  }`}
-                  aria-label="Toggle theme"
-                >
-                  {isDarkMode ? (
-                    <Sun className="w-4 h-4" />
-                  ) : (
-                    <Moon className="w-4 h-4" />
-                  )}
-                </button>
-              </div>
-              {["Home", "Services", "Projects", "Technology", "Contact"].map(
-                (item) => (
-                  <button
-                    key={item}
-                    onClick={() => {
-                      scrollToSection(item.toLowerCase());
-                      setIsMenuOpen(false);
-                    }}
-                    className={`block w-full text-left px-4 py-3 ${isDarkMode ? "text-gray-300 hover:text-cyan-400 hover:bg-white/5" : "text-gray-700 hover:text-cyan-600 hover:bg-gray-50 border border-transparent hover:border-gray-200"} rounded-xl transition-all duration-300`}
-                  >
-                    {item}
-                  </button>
-                )
-              )}
-            </div>
-          </div>
-        )}
-      </header>
+      <Header
+        key={user ? "user-logged-in" : "user-logged-out"}
+        isDarkMode={isDarkMode}
+        scrollY={scrollY}
+        toggleTheme={toggleTheme}
+        scrollToSection={scrollToSection}
+        isMenuOpen={isMenuOpen}
+        setIsMenuOpen={setIsMenuOpen}
+        user={user}
+        handleLogout={handleLogout}
+      />
 
       {/* Hero Section */}
       <section
