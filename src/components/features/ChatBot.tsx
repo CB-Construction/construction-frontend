@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
-import { chatBotService } from '../services/chatBotService';
-import { chatBotConfig } from '../config/chatBotConfig';
+import { chatBotService } from '../../services/chatBotService';
+import { chatBotConfig } from '../../config/chatBotConfig';
 import {
   Send,
   X,

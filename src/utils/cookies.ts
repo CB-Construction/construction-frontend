@@ -1,11 +1,5 @@
 // Cookie utility functions for authentication
-export interface CookieOptions {
-  expires?: number; // days
-  path?: string;
-  domain?: string;
-  secure?: boolean;
-  sameSite?: 'strict' | 'lax' | 'none';
-}
+import type { CookieOptions } from "../types";
 
 // Set a cookie
 export const setCookie = (name: string, value: string, options: CookieOptions = {}): void => {

@@ -89,15 +89,42 @@ pnpm preview
 
 ```
 src/
-├── components/           # Reusable UI components
-│   ├── contact.tsx      # Contact form with theme support
-│   └── FuturisticParticles.tsx  # Animated background particles
-├── pages/               # Main application pages
-│   └── Dashboard.tsx    # Main dashboard page
-├── assets/              # Static assets
-├── App.tsx             # Root application component
-├── main.tsx            # Application entry point
-└── index.css           # Global styles and Tailwind imports
+├── components/          # Organized component modules
+│   ├── features/       # Feature-specific components
+│   │   ├── ChatBot.tsx    # AI ChatBot component
+│   │   ├── Project.tsx    # Project showcase component
+│   │   └── contact.tsx    # Contact form component
+│   ├── layout/         # Layout components
+│   │   └── Header.tsx     # Main header component
+│   ├── ui/            # Reusable UI components
+│   │   └── FuturisticParticles.tsx  # Animated background
+│   └── index.ts       # Centralized component exports
+├── pages/             # Application pages
+│   ├── Dashboard.tsx  # Main dashboard page
+│   ├── Profile.tsx    # User profile page
+│   ├── Signin.tsx     # Sign in page
+│   └── Signup.tsx     # Sign up page
+├── hooks/             # Custom React hooks
+│   └── useProjects.ts # Projects data management
+├── services/          # API services
+│   └── chatBotService.ts  # ChatBot API integration
+├── config/            # Configuration files
+│   ├── supabase.ts    # Supabase client setup
+│   └── chatBotConfig.ts   # ChatBot configuration
+├── contexts/          # React contexts
+│   └── ThemeContext.tsx   # Theme management
+├── utils/             # Utility functions
+│   └── cookies.ts     # Cookie management utilities
+├── types/             # TypeScript type definitions
+│   └── index.ts       # Centralized type exports
+├── assets/            # Static assets
+└── App.tsx           # Root application component
+```
+
+### Documentation
+- `docs/` - Setup guides and documentation
+- `database/` - SQL scripts for database setup
+- `tests/` - Test files and test documentation
 ```
 
 ## 🎯 Key Components

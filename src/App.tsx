@@ -1,6 +1,7 @@
 import Dashboard from "./pages/Dashboard";
 import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
+import ProjectPage from "./pages/Project";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -15,6 +16,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/projects" element={<ProjectPage />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

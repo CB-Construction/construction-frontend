@@ -10,6 +10,7 @@ import {
   ChevronDown,
   Sun,
   Moon,
+  FolderOpen,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -198,6 +199,15 @@ const Header: React.FC<HeaderProps> = ({
                           </div>
                         </div>
                       </div>
+                      {/* Projects Link */}
+                      <Link
+                        to="/projects"
+                        onClick={() => setIsUserMenuOpen(false)}
+                        className={`flex items-center w-full text-left px-4 py-3 text-sm transition-colors ${isDarkMode ? "text-gray-300 hover:bg-white/10" : "text-gray-700 hover:bg-gray-100"}`}
+                      >
+                        <FolderOpen className="w-4 h-4 mr-3" />
+                        View All Projects
+                      </Link>
                       {/* Profile Link */}
                       <Link
                         to="/profile"
@@ -311,6 +321,15 @@ const Header: React.FC<HeaderProps> = ({
                       )}
                     </div>
                   </div>
+                  {/* Projects Link */}
+                  <Link
+                    to="/projects"
+                    onClick={() => setIsMenuOpen(false)}
+                    className={`flex items-center w-full text-left px-4 py-3 ${isDarkMode ? "text-gray-300 hover:text-cyan-400 hover:bg-white/5" : "text-gray-700 hover:text-cyan-600 hover:bg-gray-50"} rounded-xl transition-all duration-300`}
+                  >
+                    <FolderOpen className="w-5 h-5 mr-3" />
+                    View All Projects
+                  </Link>
                   {/* Profile Link */}
                   <Link
                     to="/profile"
