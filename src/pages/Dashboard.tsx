@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
-import FuturisticParticles from "../components/FuturisticParticles";
-import Project from "../components/Project";
+import {
+  FuturisticParticles,
+  Project,
+  Contact,
+  ChatBot,
+  Header,
+} from "../components";
 import {
   Building,
   Users,
@@ -21,9 +26,6 @@ import {
   HardHat,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import Contact from "../components/contact";
-import ChatBot from "../components/ChatBot";
-import Header from "../components/Header";
 import {
   getUserData,
   getAuthToken,

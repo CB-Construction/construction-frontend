@@ -3,20 +3,7 @@
 // You can replace the mock implementation with your actual AI API
 
 import { chatBotConfig } from '../config/chatBotConfig';
-
-export interface ChatMessage {
-  content: string;
-  role: 'user' | 'assistant';
-  timestamp?: Date;
-}
-
-export interface ChatBotAPIConfig {
-  apiUrl?: string;
-  apiKey?: string;
-  model?: string;
-  maxTokens?: number;
-  temperature?: number;
-}
+import type { ChatMessage, ChatBotAPIConfig } from "../types";
 
 class ChatBotService {
   private config: ChatBotAPIConfig;

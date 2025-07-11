@@ -1,6 +1,6 @@
 import React from 'react';
 import { Star, ArrowRight, Loader2 } from 'lucide-react';
-import { useProjects } from '../hooks/useProjects';
+import { useProjects } from '../../hooks/useProjects';
 
 interface ProjectComponentProps {
   activeProject: number;

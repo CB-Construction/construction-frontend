@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import type { Project } from "../types";
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -14,23 +15,6 @@ if (!supabaseUrl || !supabaseAnonKey) {
 }
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
-// Project interface matching your database schema
-export interface Project {
-  id: string;
-  title: string;
-  description: string;
-  category: string;
-  status: string;
-  rating: number;
-  investment: string;
-  progress: number;
-  tech: string[];
-  completion: string;
-  image: string;
-  created_at?: string;
-  updated_at?: string;
-}
 
 // Function to fetch all projects
 export const fetchProjects = async (): Promise<Project[]> => {

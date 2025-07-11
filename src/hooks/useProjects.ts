@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { fetchProjects, type Project } from '../config/supabase';
+import { fetchProjects } from "../config/supabase";
+import type { Project } from "../types";
 
 
 

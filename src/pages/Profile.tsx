@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from "react-router-dom";
 import { getUserData, clearAuthCookies, isAuthenticated } from '../utils/cookies';
 import {
-  User as UserIcon,
   Mail,
   Shield,
   LogOut,

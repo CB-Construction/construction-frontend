@@ -8,8 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "tsx tests/main-supabase.test.ts",
-    "test:all": "tsx tests/index.ts"
+    "test": "tsx tests/supabase.test.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.50.5",

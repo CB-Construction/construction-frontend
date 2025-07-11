@@ -1,6 +1,7 @@
 // Simple Supabase test using main configuration with Node.js compatibility
 import { config } from 'dotenv';
 import { createClient } from '@supabase/supabase-js';
+import type { Project } from '../src/types';
 
 // Load environment variables for Node.js
 config();
@@ -20,23 +21,6 @@ if (!supabaseUrl || !supabaseAnonKey) {
 }
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
-// Import the Project interface from main config
-export interface Project {
-  id: string;
-  title: string;
-  description: string;
-  category: string;
-  status: string;
-  rating: number;
-  investment: string;
-  progress: number;
-  tech: string[];
-  completion: string;
-  image: string;
-  created_at?: string;
-  updated_at?: string;
-}
 
 // Function to fetch all projects (same logic as main config)
 const fetchProjects = async (): Promise<Project[]> => {
