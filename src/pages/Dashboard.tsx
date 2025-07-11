@@ -684,6 +684,7 @@ const Dashboard = () => {
         setActiveProject={setActiveProject}
         isDarkMode={isDarkMode}
         getGlassCardClass={getGlassCardClass}
+        defaultItemsPerPage={3}
       />
 
       {/* Technology Section */}
